@@ -3,14 +3,13 @@
 [[ $# -ne 1 ]] && die "Usage: $PROGRAM $COMMAND pass-name"
 
 path="${1%/}"
-check_sneaky_paths "$path"
 
 # Get the full content
 content=$(cmd_show "$path")
+[[ $? -ne 0 ]] && die "$content"
 
 # Get the first line (password)
 password=$(echo "$content" | head -n 1)
-
 # Get the rest
 rest=$(echo "$content" | tail -n +2)
 
@@ -18,5 +17,5 @@ rest=$(echo "$content" | tail -n +2)
 echo "$rest"
 
 # Clip password
-clip "$password" "$path"
+clip "$password" "$path" >&2
 
